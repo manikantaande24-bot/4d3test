@@ -1,1 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
+    <meta name="theme-color" content="#1a4d5c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
 
+    <title>Wedding Invitation | Rahul &amp; Priya</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* ================================
+           RESET AND BASE STYLES
+        ================================= */
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            background: #fdfbf7;
+            font-family: sans-serif;
+
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+            -webkit-overflow-scrolling: touch;
+            -webkit-touch-callout: none;
+        }
+
+        @supports (overflow: clip) {
+            html,
+            body {
+                overflow-x: clip;
+            }
+        }
+
+        /* ================================
+           DYNAMIC VIEWPORT HEIGHT
+        ================================= */
+
+        :root {
+            --vh: 1vh;
+        }
+
+        /* ================================
+           SCROLL CONTAINERS
+        ================================= */
+
+        .scroll-container {
+            position: relative;
+            width: 100%;
+
+            height: 200vh;
+            height: calc(var(--vh, 1vh) * 200);
+            height: 200dvh;
+
+            margin: 0;
+            padding: 0;
+
+            background: #fdfbf7;
+            z-index: 10;
+        }
+
+        /* ================================
+           STICKY HERO SECTIONS
+        ================================= */
+
+        .hero-wrapper {
+            position: sticky;
+            position: -webkit-sticky;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            height: 100dvh;
+
+            max-width: calc(100vh * (9 / 16));
+            max-width: calc(var(--vh, 1vh) * 100 * (9 / 16));
+            max-width: calc(100dvh * (9 / 16));
+
+            margin: 0 auto;
+
+            overflow: hidden;
+
+            background: #000;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.18);
+
+            isolation: isolate;
+
+            /* 3D camera — lower value = stronger 3D */
+            perspective: 700px;
+            perspective-origin: 50% 50%;
+
+            touch-action: pan-y;
+        }
+
+        /* ================================
+           HERO IMAGE LAYERS
+        ================================= */
+
+        .layer {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            transform-origin: 50% 50%;
+
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+
+            pointer-events: none;
+        }
+
+        .layer img {
+            display: block;
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+            pointer-events: none;
+        }
+
+        /* --- Hero Layer Stacking --- */
+
+        .bg-layer {
+            z-index: 1;
+            transform: scale(1.25);
+        }
+
+        .petals-layer-back {
+            z-index: 2;
+            opacity: 0.82;
+            transform: scale(1.36);
+        }
+
+        .boat-layer {
+            z-index: 3;
+            transform: translate3d(0, 28vh, 0);
+        }
+
+        .boat-layer img {
+            object-fit: contain;
+            object-position: bottom center;
+        }
+
+        .petals-layer-front {
+            z-index: 4;
+            transform: translateY(-12vh) scale(1.62);
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+        }
+
+        /* ================================
+           DATE SECTION LAYER STACKING
+        ================================= */
+
+        .date-bg-layer {
+            z-index: 1;
+            transform: scale(1.35);
+        }
+
+        .date-boat-layer {
+            z-index: 2;
+            transform: translate3d(0, 15vh, 0) scale(0.95);
+            transform-origin: 50% 100%;
+        }
+
+        .date-boat-layer img {
+            object-fit: contain;
+            object-position: bottom center;
+        }
+
+        .date-water-layer {
+            z-index: 4;
+            transform: scale(1.45);
+            opacity: 0.9;
+        }
+
+        .date-grass-layer {
+            z-index: 6;
+            transform: translate3d(0, 10vh, 0) scale(1.55);
+            transform-origin: 50% 100%;
+        }
+
+        .date-grass-layer img {
+            object-fit: cover;
+            object-position: bottom center;
+        }
+
+        /* ================================
+           TOP SHADE
+        ================================= */
+
+        .hero-top-shade {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 5;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 14, 12, 0.40),
+                rgba(18, 14, 12, 0.16) 45%,
+                rgba(18, 14, 12, 0.04) 75%,
+                transparent
+            );
+
+            pointer-events: none;
+        }
+
+        /* ================================
+           HERO TEXT GROUPS
+        ================================= */
+
+        .hero-text {
+            position: absolute;
+            top: clamp(70px, 14vh, 160px);
+            left: 16px;
+            right: 16px;
+
+            z-index: 6;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(12px, 2vh, 22px);
+
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+
+            transform-origin: 50% 50%;
+
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* ---- Couple names / Date ---- */
+
+        .hero-names {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: #ffffff;
+
+            font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+            font-weight: 500;
+            font-size: clamp(46px, 9.5vh, 85px);
+            line-height: 1.0;
+            letter-spacing: 0.03em;
+            text-align: center;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.75),
+                0 0 26px rgba(255, 255, 255, 0.55),
+                0 0 48px rgba(255, 255, 255, 0.35),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 20px rgba(18, 12, 8, 0.28);
+        }
+
+        .hero-names .name {
+            display: block;
+        }
+
+        .hero-names .ampersand {
+            display: block;
+            margin: 0.02em 0 0.04em;
+
+            color: #f6e6bb;
+            font-family: "Cormorant Garamond", "Georgia", serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 0.62em;
+            line-height: 1;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.7),
+                0 0 26px rgba(255, 255, 255, 0.5),
+                0 0 44px rgba(255, 255, 255, 0.32),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 18px rgba(18, 12, 8, 0.25);
+        }
+
+        /* ---- Divider + date ---- */
+
+        .hero-subtitle {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.4vw, 14px);
+
+            color: rgba(255, 255, 255, 0.95);
+
+            font-family: "Montserrat", "Helvetica Neue", sans-serif;
+            font-weight: 400;
+            font-size: clamp(8.5px, 1.55vh, 11px);
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            text-align: center;
+
+            text-shadow:
+                0 0 6px rgba(255, 255, 255, 0.7),
+                0 1px 2px rgba(18, 12, 8, 0.4),
+                0 2px 10px rgba(18, 12, 8, 0.25);
+        }
+
+        .hero-subtitle .line {
+            display: block;
+            width: clamp(18px, 4.5vw, 38px);
+            height: 1px;
+
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .hero-subtitle .date-text {
+            white-space: nowrap;
+        }
+
+        /* ================================
+           MOTION HINT (iOS permission)
+        ================================= */
+
+        .motion-hint {
+            position: absolute;
+            left: 50%;
+            bottom: calc(24px + env(safe-area-inset-bottom));
+            z-index: 7;
+
+            padding: 10px 18px;
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.38);
+
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+
+            color: #ffffff;
+            font-family: "Montserrat", "Helvetica Neue", sans-serif;
+            font-size: 9.5px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            white-space: nowrap;
+
+            opacity: 0;
+            transform: translateX(-50%) translateY(8px);
+            pointer-events: none;
+
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .motion-hint.is-visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ================================
+           SMALL MOBILE SCREENS
+        ================================= */
+
+        @media (max-width: 380px) {
+            .hero-text {
+                top: clamp(56px, 11vh, 120px);
+                gap: 10px;
+            }
+
+            .hero-names {
+                font-size: clamp(40px, 8vh, 64px);
+                letter-spacing: 0.02em;
+            }
+
+            .hero-subtitle {
+                font-size: 7.5px;
+                letter-spacing: 0.26em;
+            }
+
+            .hero-subtitle .line {
+                width: 16px;
+            }
+
+            .motion-hint {
+                font-size: 8.5px;
+                padding: 8px 14px;
+            }
+        }
+
+        /* ================================
+           REDUCED MOTION
+        ================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            .layer,
+            .hero-text {
+                will-change: auto;
+            }
+
+            .scroll-container {
+                height: 100vh;
+                height: calc(var(--vh, 1vh) * 100);
+                height: 100dvh;
+            }
+
+            .motion-hint {
+                display: none;
+            }
+        }
+
+        @media (update: slow) {
+            .layer,
+            .hero-text {
+                will-change: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =================================
+         HERO SCROLL CONTAINER
+    ================================== -->
+
+    <section class="scroll-container" id="hero-scroll">
+
+        <div class="hero-wrapper" id="hero">
+
+            <div class="layer bg-layer" id="layer-bg">
+                <img src="assets/pondbg.png" alt="Romantic pond background" fetchpriority="high" decoding="async">
+            </div>
+
+            <div class="layer petals-layer-back" id="layer-petals-back">
+                <img src="assets/petalsimg.png" alt="" decoding="async">
+            </div>
+
+            <div class="layer boat-layer" id="layer-boat">
+                <img src="assets/boatcouple.png" alt="Bride and groom sitting in a boat" decoding="async">
+            </div>
+
+            <div class="layer petals-layer-front" id="layer-petals-front">
+                <img src="assets/petalsimg.png" alt="Floating flower petals" decoding="async">
+            </div>
+
+            <div class="hero-top-shade" aria-hidden="true"></div>
+
+            <div class="hero-text" id="hero-text">
+                <h1 class="hero-names" aria-label="Rahul and Priya">
+                    <span class="name">Rahul</span>
+                    <span class="ampersand">&amp;</span>
+                    <span class="name">Priya</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="line" aria-hidden="true"></span>
+                    <span class="date-text">Save the Date · 14 February 2026</span>
+                    <span class="line" aria-hidden="true"></span>
+                </div>
+            </div>
+
+            <div class="motion-hint" id="motion-hint" role="button" tabindex="0">
+                Tap for 3D motion
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =================================
+         WEDDING DATE SECTION
+         (Scroll parallax removed — static
+          layout with 3D tilt only)
+    ================================== -->
+
+    <section class="scroll-container" id="date-scroll">
+
+        <div class="hero-wrapper" id="date-hero">
+
+            <div class="layer date-bg-layer" id="date-layer-bg">
+                <img src="assets/bgpond.png" alt="Pond Background" fetchpriority="high" decoding="async">
+            </div>
+
+            <div class="layer date-boat-layer" id="date-layer-boat">
+                <img src="assets/boatimg2.png" alt="Couple in boat" decoding="async">
+            </div>
+
+            <div class="layer date-water-layer" id="date-layer-waterdrops">
+                <img src="assets/waterdrops.png" alt="Water drops" decoding="async">
+            </div>
+
+            <div class="layer date-grass-layer" id="date-layer-grass">
+                <img src="assets/grass.png" alt="Grass" decoding="async">
+            </div>
+
+            <div class="hero-top-shade" aria-hidden="true"></div>
+
+            <div class="hero-text" id="date-text">
+                <h1 class="hero-names" style="font-size: clamp(36px, 7.5vh, 72px);" aria-label="14 February 2026">
+                    <span class="name">14</span>
+                    <span class="ampersand">February</span>
+                    <span class="name">2026</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="line" aria-hidden="true"></span>
+                    <span class="date-text">Save the Date</span>
+                    <span class="line" aria-hidden="true"></span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+    (function () {
+        "use strict";
+
+        /* =========================================================
+           TUNING
+        ========================================================= */
+
+        var GYRO_SENSITIVITY = 9;
+        var GYRO_INVERT      = true;
+        var IDLE_AMPLITUDE   = 0.32;
+        var IDLE_DELAY       = 2.2;
+
+        /* =========================================================
+           HELPERS
+        ========================================================= */
+
+        var root = document.documentElement;
+
+        function clamp(v, min, max) {
+            return v < min ? min : (v > max ? max : v);
+        }
+
+        function nowMs() {
+            return (typeof performance !== "undefined" && performance.now)
+                ? performance.now()
+                : Date.now();
+        }
+
+        /* =========================================================
+           VIEWPORT HEIGHT FIX
+        ========================================================= */
+
+        function setViewportHeight() {
+            var h = (window.visualViewport && window.visualViewport.height)
+                  || window.innerHeight
+                  || 0;
+
+            if (h > 0) {
+                root.style.setProperty("--vh", (h * 0.01) + "px");
+            }
+        }
+
+        setViewportHeight();
+
+        window.addEventListener("resize", setViewportHeight, { passive: true });
+        window.addEventListener("orientationchange", function () {
+            setTimeout(setViewportHeight, 100);
+            setTimeout(setViewportHeight, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", setViewportHeight, { passive: true });
+            window.visualViewport.addEventListener("scroll", setViewportHeight, { passive: true });
+        }
+
+        /* =========================================================
+           ELEMENT REFERENCES
+        ========================================================= */
+
+        // Hero Section
+        var heroScroll  = document.getElementById("hero-scroll");
+        var heroWrapper = document.getElementById("hero");
+        var heroText    = document.getElementById("hero-text");
+        var bgLayer     = document.getElementById("layer-bg");
+        var petalsBack  = document.getElementById("layer-petals-back");
+        var petalsFront = document.getElementById("layer-petals-front");
+        var boatLayer   = document.getElementById("layer-boat");
+
+        // Date Section
+        var dateScroll  = document.getElementById("date-scroll");
+        var dateWrapper = document.getElementById("date-hero");
+        var dateText    = document.getElementById("date-text");
+        var dateBg      = document.getElementById("date-layer-bg");
+        var dateBoat    = document.getElementById("date-layer-boat");
+        var dateWater   = document.getElementById("date-layer-waterdrops");
+        var dateGrass   = document.getElementById("date-layer-grass");
+
+        var motionHint  = document.getElementById("motion-hint");
+
+        var prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        /* =========================================================
+           SPRING PHYSICS
+        ========================================================= */
+
+        function springStep(state, target, dt, omega, zeta) {
+            var f    = 1 + 2 * dt * zeta * omega;
+            var oo   = omega * omega;
+            var hoo  = dt * oo;
+            var hhoo = dt * hoo;
+            var inv  = 1 / (f + hhoo);
+
+            var newValue =
+                (f * state.value + dt * state.velocity + hhoo * target) * inv;
+
+            var newVelocity =
+                (state.velocity + hoo * (target - state.value)) * inv;
+
+            state.value    = newValue;
+            state.velocity = newVelocity;
+        }
+
+        /* =========================================================
+           STATE
+        ========================================================= */
+
+        var camXSpring = { value: 0, velocity: 0, omega: 15, zeta: 0.85 };
+        var camYSpring = { value: 0, velocity: 0, omega: 15, zeta: 0.85 };
+
+        var progressSpring = { value: 0, velocity: 0, omega: 9.5, zeta: 0.85 };
+
+        var targetProgress = 0;
+
+        var gyroX = 0;
+        var gyroY = 0;
+
+        var pointerX = 0;
+        var pointerY = 0;
+
+        var gyroAvailable = false;
+        var lastInputTime = nowMs();
+
+        /* =========================================================
+           SCROLL PROGRESS (Hero Section only)
+        ========================================================= */
+
+        function updateTargetProgress() {
+            var scrollDistance = heroScroll.offsetHeight - heroWrapper.offsetHeight;
+            if (scrollDistance <= 0) {
+                targetProgress = 1;
+            } else {
+                var rect = heroScroll.getBoundingClientRect();
+                var distanceScrolled = -rect.top;
+                targetProgress = clamp(distanceScrolled / scrollDistance, 0, 1);
+            }
+        }
+
+        window.addEventListener("scroll", updateTargetProgress, { passive: true });
+        window.addEventListener("resize", updateTargetProgress, { passive: true });
+        window.addEventListener("orientationchange", function () {
+            setTimeout(updateTargetProgress, 100);
+            setTimeout(updateTargetProgress, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("scroll", updateTargetProgress, { passive: true });
+        }
+
+        updateTargetProgress();
+
+        /* =========================================================
+           POINTER INPUT
+        ========================================================= */
+
+        function handlePointer(clientX, clientY) {
+            if (gyroAvailable) return;
+
+            pointerX = clamp((clientX / window.innerWidth) * 2 - 1, -1, 1);
+            pointerY = clamp((clientY / window.innerHeight) * 2 - 1, -1, 1);
+
+            lastInputTime = nowMs();
+        }
+
+        if (!prefersReducedMotion) {
+
+            window.addEventListener("mousemove", function (e) {
+                handlePointer(e.clientX, e.clientY);
+            }, { passive: true });
+
+            window.addEventListener("touchstart", function (e) {
+                if (e.touches && e.touches.length) {
+                    handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            window.addEventListener("touchmove", function (e) {
+                if (e.touches && e.touches.length) {
+                    handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+
+            window.addEventListener("touchend", function () {
+                if (gyroAvailable) return;
+                pointerX = 0;
+                pointerY = 0;
+                lastInputTime = nowMs();
+            }, { passive: true });
+
+            window.addEventListener("mouseleave", function () {
+                if (gyroAvailable) return;
+                pointerX = 0;
+                pointerY = 0;
+            });
+        }
+
+        /* =========================================================
+           GYROSCOPE
+        ========================================================= */
+
+        var gyroCalib      = [];
+        var gyroNeutral    = null;
+        var CALIB_SAMPLES  = 10;
+        var gyroAttached   = false;
+
+        function shortestDelta(a, b) {
+            var d = a - b;
+            while (d > 180) d -= 360;
+            while (d < -180) d += 360;
+            return d;
+        }
+
+        function handleOrientation(event) {
+            var beta  = event.beta;
+            var gamma = event.gamma;
+
+            if (typeof beta !== "number" || typeof gamma !== "number") return;
+            if (!isFinite(beta) || !isFinite(gamma)) return;
+
+            lastInputTime = nowMs();
+
+            if (!gyroNeutral) {
+                gyroCalib.push(beta, gamma);
+
+                if (gyroCalib.length >= CALIB_SAMPLES * 2) {
+                    var sb = 0;
+                    var sg = 0;
+
+                    for (var i = 0; i < gyroCalib.length; i += 2) {
+                        sb += gyroCalib[i];
+                        sg += gyroCalib[i + 1];
+                    }
+
+                    gyroNeutral = {
+                        beta:  sb / CALIB_SAMPLES,
+                        gamma: sg / CALIB_SAMPLES
+                    };
+
+                    gyroAvailable = true;
+                    hideHint();
+                }
+                return;
+            }
+
+            var dB = shortestDelta(beta, gyroNeutral.beta);
+            var dG = shortestDelta(gamma, gyroNeutral.gamma);
+
+            var nx = Math.tanh(dG / GYRO_SENSITIVITY);
+            var ny = Math.tanh(dB / GYRO_SENSITIVITY);
+
+            if (GYRO_INVERT) {
+                nx = -nx;
+                ny = -ny;
+            }
+
+            gyroX = nx;
+            gyroY = ny;
+            gyroAvailable = true;
+        }
+
+        function attachGyro() {
+            if (gyroAttached) return;
+            gyroAttached = true;
+            window.addEventListener(
+                "deviceorientation",
+                handleOrientation,
+                { passive: true }
+            );
+        }
+
+        /* =========================================================
+           HINT UI + PERMISSION
+        ========================================================= */
+
+        function hideHint() {
+            if (motionHint) {
+                motionHint.classList.remove("is-visible");
+            }
+        }
+
+        function showHint() {
+            if (motionHint) {
+                motionHint.classList.add("is-visible");
+            }
+        }
+
+        var firstGesture = null;
+
+        function requestGyro() {
+            if (firstGesture) {
+                window.removeEventListener("touchend", firstGesture);
+                window.removeEventListener("click", firstGesture);
+                firstGesture = null;
+            }
+
+            if (typeof DeviceOrientationEvent === "undefined") {
+                hideHint();
+                return;
+            }
+
+            if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                DeviceOrientationEvent.requestPermission()
+                    .then(function (state) {
+                        if (state === "granted") attachGyro();
+                        hideHint();
+                    })
+                    .catch(function () {
+                        hideHint();
+                    });
+            } else {
+                attachGyro();
+                hideHint();
+            }
+        }
+
+        if (!prefersReducedMotion && typeof DeviceOrientationEvent !== "undefined") {
+
+            var needsPermission =
+                (typeof DeviceOrientationEvent.requestPermission === "function");
+
+            if (needsPermission) {
+                setTimeout(showHint, 900);
+
+                firstGesture = function () {
+                    requestGyro();
+                };
+
+                window.addEventListener("touchend", firstGesture, { passive: true });
+                window.addEventListener("click", firstGesture);
+
+                if (motionHint) {
+                    motionHint.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        requestGyro();
+                    });
+
+                    motionHint.addEventListener("touchend", function (e) {
+                        e.stopPropagation();
+                    }, { passive: true });
+                }
+
+            } else {
+                attachGyro();
+            }
+        }
+
+        /* =========================================================
+           REDUCED MOTION: STATIC LAYOUT
+        ========================================================= */
+
+        if (prefersReducedMotion) {
+            bgLayer.style.transform     = "scale(1.25)";
+            petalsBack.style.transform  = "scale(1.36)";
+            petalsFront.style.transform = "translateY(-12vh) scale(1.62)";
+            boatLayer.style.transform   = "translate3d(0, 0, 0)";
+            heroText.style.transform    = "translate3d(0, 0, 0)";
+
+            dateBg.style.transform      = "scale(1.35)";
+            dateBoat.style.transform    = "translate3d(0, 15vh, 0) scale(0.95)";
+            dateWater.style.transform   = "scale(1.45)";
+            dateGrass.style.transform   = "translate3d(0, 10vh, 0) scale(1.55)";
+            dateText.style.transform    = "translate3d(0, 0, 0)";
+        }
+
+        /* =========================================================
+           RENDER HELPERS
+        ========================================================= */
+
+        function yCalc(pxVal, vhVal) {
+            var sign = vhVal < 0 ? " - " : " + ";
+            return "calc(" +
+                pxVal.toFixed(2) + "px" +
+                sign +
+                Math.abs(vhVal).toFixed(3) + "vh)";
+        }
+
+        function setLayer(el, tx, ty, px, py, ry, rx, scale, vh, baseY) {
+            var totalVh = vh + (baseY || 0);
+
+            el.style.transform =
+                "translate3d(" +
+                    (tx * px).toFixed(2) + "px, " +
+                    yCalc(ty * py, totalVh) + ", 0) " +
+                "rotateY(" + (tx * ry).toFixed(3) + "deg) " +
+                "rotateX(" + (-ty * rx).toFixed(3) + "deg) " +
+                "scale(" + scale + ")";
+        }
+
+        /* setLayerDate — static Z, no scroll offset */
+        function setLayerDate(el, tx, ty, px, py, ry, rx, scale, baseY, z) {
+            var zz = z || 0;
+
+            el.style.transform =
+                "translate3d(" +
+                    (tx * px).toFixed(2) + "px, " +
+                    yCalc(ty * py, baseY || 0) + ", " +
+                    zz.toFixed(1) + "px) " +
+                "rotateY(" + (tx * ry).toFixed(3) + "deg) " +
+                "rotateX(" + (-ty * rx).toFixed(3) + "deg) " +
+                "scale(" + scale + ")";
+        }
+
+        /* =========================================================
+           ANIMATION LOOP
+        ========================================================= */
+
+        var lastTime = 0;
+
+        function animate(time) {
+            requestAnimationFrame(animate);
+
+            if (prefersReducedMotion) return;
+
+            if (!lastTime) {
+                lastTime = time;
+                return;
+            }
+
+            var dt = (time - lastTime) / 1000;
+            lastTime = time;
+
+            if (dt > 1 / 30) dt = 1 / 30;
+            if (dt <= 0)     dt = 1 / 60;
+
+            /* ---- Choose input source ---- */
+
+            var sinceInput = (time - lastInputTime) / 1000;
+            var tx;
+            var ty;
+
+            if (gyroAvailable) {
+                tx = gyroX;
+                ty = gyroY;
+            } else {
+                tx = pointerX;
+                ty = pointerY;
+            }
+
+            /* ---- Gentle auto-drift ---- */
+
+            if (IDLE_AMPLITUDE > 0 && sinceInput > IDLE_DELAY) {
+                var ramp = Math.min(1, (sinceInput - IDLE_DELAY) / 2.5);
+                var amp  = IDLE_AMPLITUDE * ramp;
+
+                tx += Math.sin(time * 0.00055) * amp;
+                ty += Math.cos(time * 0.00042) * amp * 0.7;
+            }
+
+            tx = clamp(tx, -1.15, 1.15);
+            ty = clamp(ty, -1.15, 1.15);
+
+            /* ---- Advance springs ---- */
+
+            springStep(camXSpring, tx, dt, camXSpring.omega, camXSpring.zeta);
+            springStep(camYSpring, ty, dt, camYSpring.omega, camYSpring.zeta);
+
+            springStep(progressSpring, targetProgress, dt,
+                       progressSpring.omega, progressSpring.zeta);
+
+            var cx = camXSpring.value;
+            var cy = camYSpring.value;
+
+            var p  = progressSpring.value;
+
+            /* ============================================
+               HERO SECTION LAYERS
+               ============================================ */
+
+            setLayer(bgLayer, cx, cy, 12, 9, 3.0, 2.2, 1.25, p * -1.5, 0);
+            setLayer(petalsBack, cx, cy, 24, 17, 6.0, 4.0, 1.36, p * -5, 0);
+            setLayer(petalsFront, cx, cy, 58, 42, 11.0, 7.0, 1.62, p * -12, -12);
+
+            var boatVh = (1 - p) * 26 + 2;
+            boatLayer.style.transform =
+                "translate3d(" +
+                    (cx * 65).toFixed(2) + "px, " +
+                    yCalc(cy * 46, boatVh) + ", 0) " +
+                "rotateY(" + (cx * 14).toFixed(3) + "deg) " +
+                "rotateX(" + (-cy * 8).toFixed(3) + "deg)";
+
+            heroText.style.transform =
+                "translate3d(" +
+                    (cx * 30).toFixed(2) + "px, " +
+                    yCalc(cy * 20, p * 10) + ", 0) " +
+                "rotateY(" + (cx * 4.5).toFixed(3) + "deg) " +
+                "rotateX(" + (-cy * 3.0).toFixed(3) + "deg)";
+
+            /* ============================================
+               DATE SECTION LAYERS
+               -------------------------------------------------
+               Scroll parallax removed entirely.
+               Layers are static in position but still
+               respond to gyro/pointer tilt (cx/cy) and
+               have fixed Z-depth for a 3D feel.
+               ============================================ */
+
+            /* Background — static */
+            setLayerDate(
+                dateBg,
+                cx, cy,
+                12, 9,
+                3.0, 2.2,
+                1.35,
+                0,
+                -120
+            );
+
+            /* Boat — static position, centered */
+            var boatScale = 0.95;
+            var boatZ     = -50;
+            var boatRotY  = cx * 6;
+
+            dateBoat.style.transform =
+                "translate3d(" +
+                    (cx * 30).toFixed(2) + "px, " +
+                    yCalc(cy * 20, 15) + ", " +
+                    boatZ.toFixed(1) + "px) " +
+                "rotateY(" + boatRotY.toFixed(3) + "deg) " +
+                "rotateX(" + (-cy * 4).toFixed(3) + "deg) " +
+                "scale(" + boatScale.toFixed(3) + ")";
+
+            /* Water drops — static */
+            setLayerDate(
+                dateWater,
+                cx, cy,
+                45, 30,
+                8.0, 5.0,
+                1.45,
+                0,
+                -20
+            );
+
+            /* Grass — static */
+            setLayerDate(
+                dateGrass,
+                cx, cy,
+                60, 40,
+                10.0, 6.0,
+                1.55,
+                10,
+                60
+            );
+
+            /* Date Text — static, no scroll parallax */
+            dateText.style.transform =
+                "translate3d(" +
+                    (cx * 30).toFixed(2) + "px, " +
+                    yCalc(cy * 20, 0) + ", 0) " +
+                "rotateY(" + (cx * 4.5).toFixed(3) + "deg) " +
+                "rotateX(" + (-cy * 3.0).toFixed(3) + "deg)";
+        }
+
+        requestAnimationFrame(animate);
+
+    })();
+    </script>
+
+</body>
+</html>
