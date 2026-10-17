@@ -1,1 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
+    <meta name="theme-color" content="#1a4d5c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
 
+    <title>Wedding Invitation | Rahul &amp; Priya</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* ================================
+           RESET AND BASE STYLES
+        ================================= */
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            background: #fdfbf7;
+            font-family: sans-serif;
+
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+            -webkit-overflow-scrolling: touch;
+            -webkit-touch-callout: none;
+        }
+
+        @supports (overflow: clip) {
+            html,
+            body {
+                overflow-x: clip;
+            }
+        }
+
+        /* ================================
+           DYNAMIC VIEWPORT HEIGHT
+        ================================= */
+
+        :root {
+            --vh: 1vh;
+        }
+
+        /* ================================
+           SCROLL CONTAINERS
+        ================================= */
+
+        .scroll-container {
+            position: relative;
+            width: 100%;
+
+            height: 200vh;
+            height: calc(var(--vh, 1vh) * 200);
+            height: 200dvh;
+
+            margin: 0;
+            padding: 0;
+
+            background: #fdfbf7;
+            z-index: 10;
+        }
+
+        /* ================================
+           STICKY HERO STAGE
+           (perspective lives here)
+        ================================= */
+
+        .hero-wrapper {
+            position: sticky;
+            position: -webkit-sticky;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            height: 100dvh;
+
+            max-width: calc(100vh * (9 / 16));
+            max-width: calc(var(--vh, 1vh) * 100 * (9 / 16));
+            max-width: calc(100dvh * (9 / 16));
+
+            margin: 0 auto;
+
+            overflow: hidden;
+
+            background: #000;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.18);
+
+            isolation: isolate;
+
+            /* ---- 3D camera ---- */
+            perspective: 1100px;
+            perspective-origin: 50% 50%;
+
+            touch-action: pan-y;
+        }
+
+        /* ================================
+           3D SCENE
+           (rotated by gyro / pointer)
+        ================================= */
+
+        .scene {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+
+            transform: translate3d(0, 0, 0);
+
+            will-change: transform;
+
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* ================================
+           DEPTH LAYERS
+        ================================= */
+
+        .layer {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            transform-origin: 50% 50%;
+
+            will-change: transform;
+
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+
+            pointer-events: none;
+        }
+
+        .layer img {
+            display: block;
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+            pointer-events: none;
+        }
+
+        /* --- Default pre-JS / no-JS transforms ---
+           (JS overwrites these on the first frame) */
+
+        #layer-bg {
+            z-index: 1;
+            transform: translate3d(0, calc(var(--vh, 1vh) * 0), -220px) scale(1.5600);
+        }
+
+        #layer-petals-back {
+            z-index: 2;
+            transform: translate3d(0, calc(var(--vh, 1vh) * 0), -130px) scale(1.5652);
+        }
+
+        #layer-boat {
+            z-index: 3;
+            transform: translate3d(0, calc(var(--vh, 1vh) * 28), -40px) scale(1.0565);
+        }
+
+        #layer-boat img {
+            object-fit: contain;
+            object-position: bottom center;
+        }
+
+        #layer-petals-front {
+            z-index: 4;
+            transform: translate3d(0, calc(var(--vh, 1vh) * -12), 90px) scale(1.4873);
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+        }
+
+        #date-layer-bg {
+            z-index: 1;
+            transform: translate3d(0, 0, -220px) scale(1.6200);
+        }
+
+        #date-layer-boat {
+            z-index: 2;
+            transform: translate3d(0, calc(var(--vh, 1vh) * 15), -60px) scale(1.0018);
+        }
+
+        #date-layer-boat img {
+            object-fit: contain;
+            object-position: bottom center;
+        }
+
+        #date-layer-waterdrops {
+            z-index: 4;
+            transform: translate3d(0, 0, 40px) scale(1.3971);
+        }
+
+        #date-layer-grass {
+            z-index: 6;
+            transform: translate3d(0, calc(var(--vh, 1vh) * 10), 110px) scale(1.3950);
+        }
+
+        #date-layer-grass img {
+            object-fit: cover;
+            object-position: bottom center;
+        }
+
+        /* ================================
+           TOP SHADE (vignette)
+        ================================= */
+
+        .hero-top-shade {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 5;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 14, 12, 0.40),
+                rgba(18, 14, 12, 0.16) 45%,
+                rgba(18, 14, 12, 0.04) 75%,
+                transparent
+            );
+
+            pointer-events: none;
+        }
+
+        /* ================================
+           HERO TEXT
+        ================================= */
+
+        .hero-text {
+            position: absolute;
+            top: clamp(70px, 14vh, 160px);
+            left: 16px;
+            right: 16px;
+
+            z-index: 6;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(12px, 2vh, 22px);
+
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+
+            transform-origin: 50% 50%;
+
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* ---- Couple names / Date ---- */
+
+        .hero-names {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: #ffffff;
+
+            font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+            font-weight: 500;
+            font-size: clamp(46px, 9.5vh, 85px);
+            line-height: 1.0;
+            letter-spacing: 0.03em;
+            text-align: center;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.75),
+                0 0 26px rgba(255, 255, 255, 0.55),
+                0 0 48px rgba(255, 255, 255, 0.35),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 20px rgba(18, 12, 8, 0.28);
+        }
+
+        .hero-names .name {
+            display: block;
+        }
+
+        .hero-names .ampersand {
+            display: block;
+            margin: 0.02em 0 0.04em;
+
+            color: #f6e6bb;
+            font-family: "Cormorant Garamond", "Georgia", serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 0.62em;
+            line-height: 1;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.7),
+                0 0 26px rgba(255, 255, 255, 0.5),
+                0 0 44px rgba(255, 255, 255, 0.32),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 18px rgba(18, 12, 8, 0.25);
+        }
+
+        /* ---- Divider + date ---- */
+
+        .hero-subtitle {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.4vw, 14px);
+
+            color: rgba(255, 255, 255, 0.95);
+
+            font-family: "Montserrat", "Helvetica Neue", sans-serif;
+            font-weight: 400;
+            font-size: clamp(8.5px, 1.55vh, 11px);
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            text-align: center;
+
+            text-shadow:
+                0 0 6px rgba(255, 255, 255, 0.7),
+                0 1px 2px rgba(18, 12, 8, 0.4),
+                0 2px 10px rgba(18, 12, 8, 0.25);
+        }
+
+        .hero-subtitle .line {
+            display: block;
+            width: clamp(18px, 4.5vw, 38px);
+            height: 1px;
+
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .hero-subtitle .date-text {
+            white-space: nowrap;
+        }
+
+        /* ================================
+           MOTION HINT (iOS permission)
+        ================================= */
+
+        .motion-hint {
+            position: absolute;
+            left: 50%;
+            bottom: calc(24px + env(safe-area-inset-bottom));
+            z-index: 7;
+
+            padding: 10px 18px;
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.38);
+
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+
+            color: #ffffff;
+            font-family: "Montserrat", "Helvetica Neue", sans-serif;
+            font-size: 9.5px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            white-space: nowrap;
+
+            opacity: 0;
+            transform: translateX(-50%) translateY(8px);
+            pointer-events: none;
+
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .motion-hint.is-visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ================================
+           SMALL MOBILE SCREENS
+        ================================= */
+
+        @media (max-width: 380px) {
+            .hero-text {
+                top: clamp(56px, 11vh, 120px);
+                gap: 10px;
+            }
+
+            .hero-names {
+                font-size: clamp(40px, 8vh, 64px);
+                letter-spacing: 0.02em;
+            }
+
+            .hero-subtitle {
+                font-size: 7.5px;
+                letter-spacing: 0.26em;
+            }
+
+            .hero-subtitle .line {
+                width: 16px;
+            }
+
+            .motion-hint {
+                font-size: 8.5px;
+                padding: 8px 14px;
+            }
+        }
+
+        /* ================================
+           REDUCED MOTION
+        ================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            .layer,
+            .hero-text,
+            .scene {
+                will-change: auto;
+            }
+
+            .scroll-container {
+                height: 100vh;
+                height: calc(var(--vh, 1vh) * 100);
+                height: 100dvh;
+            }
+
+            .motion-hint {
+                display: none;
+            }
+        }
+
+        @media (update: slow) {
+            .layer,
+            .hero-text,
+            .scene {
+                will-change: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =================================
+         HERO SECTION
+    ================================== -->
+
+    <section class="scroll-container" id="hero-scroll">
+
+        <div class="hero-wrapper" id="hero">
+
+            <div class="scene" id="hero-scene">
+
+                <div class="layer" id="layer-bg">
+                    <img src="assets/pondbg.png" alt="Romantic pond background" fetchpriority="high" decoding="async">
+                </div>
+
+                <div class="layer" id="layer-petals-back">
+                    <img src="assets/petalsimg.png" alt="" decoding="async">
+                </div>
+
+                <div class="layer" id="layer-boat">
+                    <img src="assets/boatcouple.png" alt="Bride and groom sitting in a boat" decoding="async">
+                </div>
+
+                <div class="layer" id="layer-petals-front">
+                    <img src="assets/petalsimg.png" alt="Floating flower petals" decoding="async">
+                </div>
+
+            </div>
+
+            <div class="hero-top-shade" aria-hidden="true"></div>
+
+            <div class="hero-text" id="hero-text">
+                <h1 class="hero-names" aria-label="Rahul and Priya">
+                    <span class="name">Rahul</span>
+                    <span class="ampersand">&amp;</span>
+                    <span class="name">Priya</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="line" aria-hidden="true"></span>
+                    <span class="date-text">Save the Date · 14 February 2026</span>
+                    <span class="line" aria-hidden="true"></span>
+                </div>
+            </div>
+
+            <div class="motion-hint" id="motion-hint" role="button" tabindex="0">
+                Tap for 3D motion
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =================================
+         WEDDING DATE SECTION
+    ================================== -->
+
+    <section class="scroll-container" id="date-scroll">
+
+        <div class="hero-wrapper" id="date-hero">
+
+            <div class="scene" id="date-scene">
+
+                <div class="layer" id="date-layer-bg">
+                    <img src="assets/bgpond.png" alt="Pond Background" fetchpriority="high" decoding="async">
+                </div>
+
+                <div class="layer" id="date-layer-boat">
+                    <img src="assets/boatimg2.png" alt="Couple in boat" decoding="async">
+                </div>
+
+                <div class="layer" id="date-layer-waterdrops">
+                    <img src="assets/waterdrops.png" alt="Water drops" decoding="async">
+                </div>
+
+                <div class="layer" id="date-layer-grass">
+                    <img src="assets/grass.png" alt="Grass" decoding="async">
+                </div>
+
+            </div>
+
+            <div class="hero-top-shade" aria-hidden="true"></div>
+
+            <div class="hero-text" id="date-text">
+                <h1 class="hero-names" style="font-size: clamp(36px, 7.5vh, 72px);" aria-label="14 February 2026">
+                    <span class="name">14</span>
+                    <span class="ampersand">February</span>
+                    <span class="name">2026</span>
+                </h1>
+                <div class="hero-subtitle">
+                    <span class="line" aria-hidden="true"></span>
+                    <span class="date-text">Save the Date</span>
+                    <span class="line" aria-hidden="true"></span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+    (function () {
+        "use strict";
+
+        /* ============================================================
+           1. DEVICE MOTION BUDGET
+           ------------------------------------------------------------
+           Touch devices get a much gentler camera. This is the single
+           place that decides "how much 3D" the visitor will feel.
+        ============================================================ */
+
+        var IS_TOUCH = (function () {
+            if (window.matchMedia) {
+                return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+            }
+            return ("ontouchstart" in window);
+        })();
+
+        var M = {
+            rot    : IS_TOUCH ? 0.40 : 1.00,   /* camera rotation (deg)        */
+            shift  : IS_TOUCH ? 0.40 : 1.00,   /* camera slide (px)            */
+            scroll : IS_TOUCH ? 0.55 : 1.00,   /* layer travel during scroll   */
+            idle   : IS_TOUCH ? 0.45 : 1.00,   /* idle drift                   */
+            text   : IS_TOUCH ? 0.55 : 1.00    /* hero text counter-movement   */
+        };
+
+        /* ============================================================
+           2. CONFIG
+        ============================================================ */
+
+        var CFG = {
+
+            /* Camera -------------------------------------------------- */
+            perspective  : 1100,               // must match CSS .hero-wrapper perspective
+            maxRotY      : 5.4 * M.rot,        // deg — horizontal camera swing
+            maxRotX      : 4.4 * M.rot,        // deg — vertical camera swing
+            sceneShiftX  : 9  * M.shift,       // px  — uniform camera slide
+            sceneShiftY  : 7  * M.shift,       // px
+
+            /* Hero text (floats in front of the scene) ---------------- */
+            textShiftX   : 6 * M.text,         // px
+            textShiftY   : 5 * M.text,         // px
+            textRotY     : 1.6 * M.text,       // deg
+            textRotX     : 1.3 * M.text,       // deg
+
+            /* Device tilt input -------------------------------------- */
+            tiltRange    : IS_TOUCH ? 34 : 20, // deg of physical tilt for full deflection
+            tiltDead     : IS_TOUCH ? 2.4 : 1.4, // deg dead-zone (kills micro jitter)
+            tiltClamp    : 42,                 // deg hard clamp on raw input
+            invertX      : false,
+            invertY      : false,
+
+            /* Smoothing ---------------------------------------------- */
+            lpAlpha      : IS_TOUCH ? 0.12 : 0.22, // low-pass strength per 60fps frame
+            calibCount   : 24,                 // samples used to find the neutral pose
+
+            /* Spring (final settle) ----------------------------------- */
+            springOmega  : IS_TOUCH ? 9.0 : 10.5,
+            springZeta   : 0.92,
+            progOmega    : 12.0,
+            progZeta     : 0.95,
+
+            /* Idle drift (keeps it alive when nobody moves) ----------- */
+            idleAmp      : 0.26 * M.idle,
+            idleDelay    : 2.6,
+
+            /* Touch drag fallback (used only when there is no gyro) --- */
+            touchGain    : 0.45
+        };
+
+        /* ============================================================
+           3. HELPERS
+        ============================================================ */
+
+        var root = document.documentElement;
+
+        function clamp(v, min, max) {
+            return v < min ? min : (v > max ? max : v);
+        }
+
+        function nowMs() {
+            return (typeof performance !== "undefined" && performance.now)
+                ? performance.now()
+                : Date.now();
+        }
+
+        function shortestDelta(a, b) {
+            var d = a - b;
+            while (d > 180) d -= 360;
+            while (d < -180) d += 360;
+            return d;
+        }
+
+        /* ============================================================
+           4. VIEWPORT HEIGHT FIX
+        ============================================================ */
+
+        function setViewportHeight() {
+            var h = (window.visualViewport && window.visualViewport.height)
+                  || window.innerHeight
+                  || 0;
+
+            if (h > 0) {
+                root.style.setProperty("--vh", (h * 0.01) + "px");
+            }
+        }
+
+        setViewportHeight();
+
+        window.addEventListener("resize", setViewportHeight, { passive: true });
+
+        window.addEventListener("orientationchange", function () {
+            setTimeout(setViewportHeight, 100);
+            setTimeout(setViewportHeight, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", setViewportHeight, { passive: true });
+            window.visualViewport.addEventListener("scroll", setViewportHeight, { passive: true });
+        }
+
+        /* ============================================================
+           5. ELEMENT REFERENCES
+        ============================================================ */
+
+        var heroScroll  = document.getElementById("hero-scroll");
+        var heroWrapper = document.getElementById("hero");
+        var heroScene   = document.getElementById("hero-scene");
+        var heroText    = document.getElementById("hero-text");
+
+        var dateScene   = document.getElementById("date-scene");
+        var dateText    = document.getElementById("date-text");
+
+        var motionHint  = document.getElementById("motion-hint");
+
+        var reducedMotion = window.matchMedia
+            ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            : false;
+
+        /* ============================================================
+           6. LAYER DEFINITIONS
+           ------------------------------------------------------------
+           z       -> real depth in px (negative = further away)
+           scale   -> apparent scale the layer should have
+           baseY   -> resting vertical offset in vh
+           scrollY -> extra vertical travel (vh) across the hero scroll
+        ============================================================ */
+
+        function makeLayer(id, z, scale, baseY, scrollY) {
+            return {
+                el      : document.getElementById(id),
+                z       : z,
+                scale   : scale,
+                baseY   : baseY || 0,
+                scrollY : (scrollY || 0) * M.scroll
+            };
+        }
+
+        var heroLayers = [
+            makeLayer("layer-bg",             -220, 1.30,   0,  -1.5),
+            makeLayer("layer-petals-back",    -130, 1.40,   0,  -5.0),
+            makeLayer("layer-boat",            -40, 1.02,  28, -26.0),
+            makeLayer("layer-petals-front",     90, 1.62, -12, -12.0)
+        ];
+
+        var dateLayers = [
+            makeLayer("date-layer-bg",        -220, 1.35,   0,  0),
+            makeLayer("date-layer-boat",       -60, 0.95,  15,  0),
+            makeLayer("date-layer-waterdrops",  40, 1.45,   0,  0),
+            makeLayer("date-layer-grass",      110, 1.55,  10,  0)
+        ];
+
+        /* ============================================================
+           7. SPRING PHYSICS
+        ============================================================ */
+
+        function springStep(state, target, dt, omega, zeta) {
+            var f    = 1 + 2 * dt * zeta * omega;
+            var oo   = omega * omega;
+            var hoo  = dt * oo;
+            var hhoo = dt * hoo;
+            var inv  = 1 / (f + hhoo);
+
+            var newValue =
+                (f * state.value + dt * state.velocity + hhoo * target) * inv;
+
+            var newVelocity =
+                (state.velocity + hoo * (target - state.value)) * inv;
+
+            state.value    = newValue;
+            state.velocity = newVelocity;
+        }
+
+        /* ============================================================
+           8. RUNTIME STATE
+        ============================================================ */
+
+        var camX = { value: 0, velocity: 0 };   // normalised -1 .. 1
+        var camY = { value: 0, velocity: 0 };
+        var prog = { value: 0, velocity: 0 };   // 0 .. 1 scroll progress
+
+        var targetProgress = 0;
+
+        var inputX = 0;
+        var inputY = 0;
+
+        var lastInputTime    = nowMs();
+        var lastRegisteredX  = 0;
+        var lastRegisteredY  = 0;
+
+        var idlePhase = 0;
+
+        /* ============================================================
+           9. SCROLL PROGRESS (hero only)
+        ============================================================ */
+
+        function updateProgress() {
+            if (!heroScroll || !heroWrapper) return;
+
+            var distance = heroScroll.offsetHeight - heroWrapper.offsetHeight;
+
+            if (distance <= 0) {
+                targetProgress = 0;
+                return;
+            }
+
+            var rect = heroScroll.getBoundingClientRect();
+            targetProgress = clamp(-rect.top / distance, 0, 1);
+        }
+
+        window.addEventListener("scroll", updateProgress, { passive: true });
+        window.addEventListener("resize", updateProgress, { passive: true });
+
+        window.addEventListener("orientationchange", function () {
+            setTimeout(updateProgress, 100);
+            setTimeout(updateProgress, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("scroll", updateProgress, { passive: true });
+        }
+
+        updateProgress();
+
+        /* ============================================================
+           10. TILT NORMALISATION
+           ------------------------------------------------------------
+           raw degrees -> dead-zone -> soft clamp -> smoothstep curve
+           The smoothstep keeps tiny movements almost still while
+           giving a rich, controlled response in the middle range.
+        ============================================================ */
+
+        function normalizeTilt(deg) {
+            var sign = deg < 0 ? -1 : 1;
+            var abs  = Math.abs(deg) - CFG.tiltDead;
+
+            if (abs <= 0) return 0;
+
+            abs = Math.min(abs, CFG.tiltClamp);
+
+            var v = Math.min(1, abs / CFG.tiltRange);
+
+            /* smoothstep — gentle near the centre, saturating at the edge */
+            v = v * v * (3 - 2 * v);
+
+            return sign * v;
+        }
+
+        /* ============================================================
+           11. GYROSCOPE
+        ============================================================ */
+
+        var gyroAttached = false;
+        var gyroReady    = false;
+
+        var gyroNeutral  = null;
+        var calibBuffer  = [];
+
+        var filterX = 0;
+        var filterY = 0;
+        var lastGyroTime = 0;
+
+        function getScreenAngle() {
+            if (window.screen && screen.orientation &&
+                typeof screen.orientation.angle === "number") {
+                return screen.orientation.angle;
+            }
+            if (typeof window.orientation === "number") {
+                return window.orientation;
+            }
+            return 0;
+        }
+
+        /* trimmed mean — ignores outliers picked up while the user
+           was still moving the phone during calibration */
+        function finalizeCalibration() {
+            var xs = [];
+            var ys = [];
+            var i;
+
+            for (i = 0; i < calibBuffer.length; i += 2) {
+                xs.push(calibBuffer[i]);
+                ys.push(calibBuffer[i + 1]);
+            }
+
+            xs.sort(function (a, b) { return a - b; });
+            ys.sort(function (a, b) { return a - b; });
+
+            var lo = Math.floor(xs.length * 0.20);
+            var hi = Math.ceil(xs.length * 0.80);
+            if (hi <= lo) { lo = 0; hi = xs.length; }
+
+            var sx = 0;
+            var sy = 0;
+            var n  = 0;
+
+            for (i = lo; i < hi; i++) {
+                sx += xs[i];
+                sy += ys[i];
+                n++;
+            }
+
+            gyroNeutral = {
+                x: sx / (n || 1),
+                y: sy / (n || 1)
+            };
+
+            filterX  = 0;
+            filterY  = 0;
+            gyroReady = true;
+
+            hideHint();
+        }
+
+        function handleOrientation(event) {
+            var beta  = event.beta;
+            var gamma = event.gamma;
+
+            if (typeof beta !== "number" || typeof gamma !== "number") return;
+            if (!isFinite(beta) || !isFinite(gamma)) return;
+
+            /* --- rotate the tilt vector into screen space ---
+               (so landscape works exactly like portrait)       */
+            var angle = getScreenAngle() * Math.PI / 180;
+            var ca = Math.cos(angle);
+            var sa = Math.sin(angle);
+
+            var sx =  gamma * ca + beta * sa;
+            var sy = -gamma * sa + beta * ca;
+
+            /* --- capture the neutral pose --------------------- */
+            if (!gyroNeutral) {
+                calibBuffer.push(sx, sy);
+
+                if (calibBuffer.length >= CFG.calibCount * 2) {
+                    finalizeCalibration();
+                }
+                return;
+            }
+
+            /* --- delta from the neutral pose ------------------ */
+            var rawX = shortestDelta(sx, gyroNeutral.x);
+            var rawY = shortestDelta(sy, gyroNeutral.y);
+
+            /* --- frame-rate independent low-pass -------------- */
+            var t  = nowMs();
+            var dt = lastGyroTime ? Math.min(0.1, (t - lastGyroTime) / 1000) : (1 / 60);
+            lastGyroTime = t;
+
+            var k = 1 - Math.pow(1 - CFG.lpAlpha, dt * 60);
+
+            filterX += (rawX - filterX) * k;
+            filterY += (rawY - filterY) * k;
+
+            /* --- normalise ------------------------------------ */
+            var nx = normalizeTilt(filterX);
+            var ny = normalizeTilt(filterY);
+
+            if (CFG.invertX) nx = -nx;
+            if (CFG.invertY) ny = -ny;
+
+            inputX = nx;
+            inputY = ny;
+
+            /* --- only count this as "activity" when it actually
+                   moves, so the idle drift can kick in while the
+                   phone lies still on a table ------------------ */
+            if (Math.abs(nx - lastRegisteredX) > 0.02 ||
+                Math.abs(ny - lastRegisteredY) > 0.02) {
+
+                lastRegisteredX = nx;
+                lastRegisteredY = ny;
+                lastInputTime = t;
+            }
+        }
+
+        function attachGyro() {
+            if (gyroAttached) return;
+            gyroAttached = true;
+            window.addEventListener(
+                "deviceorientation",
+                handleOrientation,
+                { passive: true }
+            );
+        }
+
+        /* ============================================================
+           12. POINTER / TOUCH FALLBACK
+           ------------------------------------------------------------
+           Desktop  : pointer position maps to the camera (nice + wide).
+           Touch    : only a gentle HORIZONTAL drag is allowed, because
+                      a vertical drag is a scroll and must never swing
+                      the camera. This was the main source of "too much
+                      movement" on phones.
+        ============================================================ */
+
+        function handleMouse(clientX, clientY) {
+            if (gyroReady) return;
+
+            var nx = (clientX / window.innerWidth) * 2 - 1;
+            var ny = (clientY / window.innerHeight) * 2 - 1;
+
+            inputX = clamp(nx, -1, 1);
+            inputY = clamp(ny, -1, 1);
+
+            lastInputTime = nowMs();
+        }
+
+        var touchStartX = 0;
+        var touchActive = false;
+
+        function handleTouchStart(e) {
+            if (gyroReady || !e.touches || !e.touches.length) return;
+            touchStartX = e.touches[0].clientX;
+            touchActive = true;
+        }
+
+        function handleTouchMove(e) {
+            if (gyroReady || !touchActive || !e.touches || !e.touches.length) return;
+
+            var dx    = e.touches[0].clientX - touchStartX;
+            var range = Math.max(140, window.innerWidth * 0.45);
+
+            inputX = clamp(dx / range, -1, 1) * CFG.touchGain;
+            inputY = 0;                     /* never follow a scroll */
+
+            lastInputTime = nowMs();
+        }
+
+        function handleTouchEnd() {
+            if (gyroReady) return;
+
+            touchActive = false;
+            inputX = 0;
+            inputY = 0;
+            lastInputTime = nowMs();
+        }
+
+        if (!reducedMotion) {
+
+            window.addEventListener("mousemove", function (e) {
+                handleMouse(e.clientX, e.clientY);
+            }, { passive: true });
+
+            window.addEventListener("mouseleave", function () {
+                if (gyroReady) return;
+                inputX = 0;
+                inputY = 0;
+            });
+
+            window.addEventListener("touchstart", handleTouchStart, { passive: true });
+            window.addEventListener("touchmove",  handleTouchMove,  { passive: true });
+            window.addEventListener("touchend",   handleTouchEnd,   { passive: true });
+            window.addEventListener("touchcancel", handleTouchEnd,  { passive: true });
+        }
+
+        /* ============================================================
+           13. HINT + PERMISSION
+        ============================================================ */
+
+        var firstGesture = null;
+
+        function showHint() {
+            if (motionHint) motionHint.classList.add("is-visible");
+        }
+
+        function hideHint() {
+            if (motionHint) motionHint.classList.remove("is-visible");
+        }
+
+        function requestGyro() {
+
+            if (firstGesture) {
+                window.removeEventListener("touchend", firstGesture);
+                window.removeEventListener("click", firstGesture);
+                firstGesture = null;
+            }
+
+            if (typeof DeviceOrientationEvent === "undefined") {
+                hideHint();
+                return;
+            }
+
+            if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                DeviceOrientationEvent.requestPermission()
+                    .then(function (state) {
+                        if (state === "granted") attachGyro();
+                        hideHint();
+                    })
+                    .catch(function () {
+                        hideHint();
+                    });
+            } else {
+                attachGyro();
+                hideHint();
+            }
+        }
+
+        if (!reducedMotion && typeof DeviceOrientationEvent !== "undefined") {
+
+            var needsPermission =
+                (typeof DeviceOrientationEvent.requestPermission === "function");
+
+            if (needsPermission) {
+
+                setTimeout(showHint, 1000);
+
+                firstGesture = function () {
+                    requestGyro();
+                };
+
+                window.addEventListener("touchend", firstGesture, { passive: true });
+                window.addEventListener("click", firstGesture);
+
+                if (motionHint) {
+                    motionHint.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        requestGyro();
+                    });
+
+                    motionHint.addEventListener("touchend", function (e) {
+                        e.stopPropagation();
+                    }, { passive: true });
+                }
+
+            } else {
+                attachGyro();
+            }
+        }
+
+        /* ============================================================
+           14. LAYER RENDERING
+           ------------------------------------------------------------
+           Each layer sits at a real Z depth. The scale is compensated
+           so the layer keeps exactly the apparent size you asked for,
+           which means rotating the camera produces genuine parallax.
+        ============================================================ */
+
+        function renderLayer(cfg, progress) {
+            var el = cfg.el;
+            if (!el) return;
+
+            /* compensate the perspective shrink caused by translateZ */
+            var comp  = (CFG.perspective - cfg.z) / CFG.perspective;
+            var scale = cfg.scale * comp;
+
+            /* vertical position in vh (scroll driven for the hero) */
+            var yvh = cfg.baseY + progress * cfg.scrollY;
+
+            el.style.transform =
+                "translate3d(0px, calc(var(--vh, 1vh) * " + yvh.toFixed(2) + "), " +
+                cfg.z + "px) " +
+                "scale(" + scale.toFixed(4) + ")";
+        }
+
+        function renderText(el, cx, cy) {
+            if (!el) return;
+
+            el.style.transform =
+                "translate3d(" +
+                    (-cx * CFG.textShiftX).toFixed(2) + "px, " +
+                    (-cy * CFG.textShiftY).toFixed(2) + "px, 0) " +
+                "rotateY(" + (cx * CFG.textRotY).toFixed(3) + "deg) " +
+                "rotateX(" + (-cy * CFG.textRotX).toFixed(3) + "deg)";
+        }
+
+        function sceneTransform(cx, cy) {
+            return "translate3d(" +
+                    (cx * CFG.sceneShiftX).toFixed(2) + "px, " +
+                    (cy * CFG.sceneShiftY).toFixed(2) + "px, 0) " +
+                   "rotateY(" + (-cx * CFG.maxRotY).toFixed(3) + "deg) " +
+                   "rotateX(" + (cy * CFG.maxRotX).toFixed(3) + "deg)";
+        }
+
+        var lastDraw = { x: 1e9, y: 1e9, p: 1e9 };
+
+        function draw(cx, cy, p) {
+            /* skip micro-updates once everything has settled */
+            if (Math.abs(cx - lastDraw.x) < 0.0004 &&
+                Math.abs(cy - lastDraw.y) < 0.0004 &&
+                Math.abs(p  - lastDraw.p) < 0.0004) {
+                return;
+            }
+
+            lastDraw.x = cx;
+            lastDraw.y = cy;
+            lastDraw.p = p;
+
+            var t = sceneTransform(cx, cy);
+
+            if (heroScene) heroScene.style.transform = t;
+            if (dateScene) dateScene.style.transform = t;
+
+            var i;
+            for (i = 0; i < heroLayers.length; i++) renderLayer(heroLayers[i], p);
+            for (i = 0; i < dateLayers.length; i++) renderLayer(dateLayers[i], 0);
+
+            renderText(heroText, cx, cy);
+            renderText(dateText, cx, cy);
+        }
+
+        /* ============================================================
+           15. ANIMATION LOOP
+        ============================================================ */
+
+        var lastFrameTime = 0;
+
+        function frame(now) {
+            requestAnimationFrame(frame);
+
+            var dt = lastFrameTime ? (now - lastFrameTime) / 1000 : (1 / 60);
+            lastFrameTime = now;
+
+            if (!(dt > 0)) dt = 1 / 60;
+            if (dt > 0.05) dt = 0.05;
+
+            /* ---- idle drift ---------------------------------- */
+            idlePhase += dt;
+
+            var idleX = 0;
+            var idleY = 0;
+            var still = (now - lastInputTime) / 1000;
+
+            if (still > CFG.idleDelay) {
+                var ramp = Math.min(1, (still - CFG.idleDelay) / 3);
+                idleX = Math.sin(idlePhase * 0.55) * CFG.idleAmp * ramp;
+                idleY = Math.sin(idlePhase * 0.37 + 1.1) * CFG.idleAmp * 0.65 * ramp;
+            }
+
+            /* ---- springs ------------------------------------- */
+            springStep(
+                camX,
+                clamp(inputX + idleX, -1.15, 1.15),
+                dt, CFG.springOmega, CFG.springZeta
+            );
+
+            springStep(
+                camY,
+                clamp(inputY + idleY, -1.15, 1.15),
+                dt, CFG.springOmega, CFG.springZeta
+            );
+
+            springStep(
+                prog,
+                targetProgress,
+                dt, CFG.progOmega, CFG.progZeta
+            );
+
+            draw(camX.value, camY.value, prog.value);
+        }
+
+        if (reducedMotion) {
+            /* static, respectful version */
+            draw(0, 0, 0);
+        } else {
+            requestAnimationFrame(frame);
+        }
+
+    })();
+    </script>
+
+</body>
+</html>
